@@ -2,24 +2,33 @@ package main
 
 import (
 	"fmt"
+	"ginWeb/models"
 	"ginWeb/pkg/setting"
+	"ginWeb/routers"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
+func init() {
+	models.Setup()
+}
+
 func main() {
-	r := gin.Default()
-	r.GET("/test", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "test",
-		})
-	})
+	gin.SetMode(setting.RunMode)
+
+	endPoint := fmt.Sprintf(":%d", setting.HTTPPort)
+	routerInit := routers.InitRouter()
+	readTimeout := setting.ReadTimeout
+	WriteTimeout := setting.WriteTimeout
+	MaxHeaderBytes := 1 << 20
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
-		Handler:        r,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
-		MaxHeaderBytes: 1 << 20,
+		Addr:           endPoint,
+		Handler:        routerInit,
+		ReadTimeout:    readTimeout,
+		WriteTimeout:   WriteTimeout,
+		MaxHeaderBytes: MaxHeaderBytes,
 	}
+	log.Printf("[info] start http server listening %s", endPoint)
 	s.ListenAndServe()
 }

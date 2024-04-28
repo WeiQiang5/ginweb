@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"ginWeb/pkg/setting"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 )
 
@@ -15,7 +16,7 @@ type Model struct {
 	ModifiedOn int `json:"modified_on"`
 }
 
-func init() {
+func Setup() {
 	var (
 		err                                               error
 		dbType, dbName, user, password, host, tablePrefix string
@@ -32,11 +33,10 @@ func init() {
 	host = sec.Key("HOST").String()
 	tablePrefix = sec.Key("TABLE_PREFIX").String()
 
-	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local"),
-		user, password, host, dbName)
+	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, dbName))
 
 	if err != nil {
-		log.Println(err)
+		log.Println("数据库连接报错=>", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {

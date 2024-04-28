@@ -31,9 +31,12 @@ func init() {
 	LoadApp()
 }
 
+// 获取默认分区的
 func LoadBase() {
 	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
 }
+
+// 获取server分区的
 func LoadServer() {
 	sec, err := Cfg.GetSection("server")
 	if err != nil {
@@ -43,6 +46,8 @@ func LoadServer() {
 	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
 	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
 }
+
+// 获取app分区的
 func LoadApp() {
 	sec, err := Cfg.GetSection("app")
 	if err != nil {

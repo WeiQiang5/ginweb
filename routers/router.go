@@ -1,6 +1,8 @@
 package routers
 
 import (
+	"ginWeb/middleware/jwt"
+	"ginWeb/routers/api"
 	v1 "ginWeb/routers/api/v1"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +18,10 @@ func InitRouter() *gin.Engine {
 	//Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
 
+	r.GET("/auth", api.GetAuth)
+
 	v1Api := r.Group("/api/v1")
+	v1Api.Use(jwt.JWT())
 	{
 		//	获取标签列表
 		v1Api.GET("/tags", v1.GetTags)

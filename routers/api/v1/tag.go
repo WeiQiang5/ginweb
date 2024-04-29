@@ -11,7 +11,12 @@ import (
 	"net/http"
 )
 
-// 获取多个文章标签
+// GetTags
+// @Summary 获取文章标签
+// @Param name query string true "标签名"
+// @Param state query int false "标签状态"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags [get]
 func GetTags(c *gin.Context) {
 	//c.Query是为了获取?name=test这类url参数,DefaultQuery是可以设置默认值
 	name := c.Query("name")
@@ -39,7 +44,13 @@ func GetTags(c *gin.Context) {
 	})
 }
 
-// 新增文章标签
+// AddTag
+// @Summary 新增文章标签
+// @Param name query string true "标签名"
+// @Param state query int false "标签状态"
+// @Param created_by query string true "创建人"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags [post]
 func AddTag(c *gin.Context) {
 	name := c.Query("name")
 	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
@@ -69,7 +80,14 @@ func AddTag(c *gin.Context) {
 	})
 }
 
-// 修改文章标签
+// EditTag
+// @Summary 修改文章标签
+// @Param id path int true "文章id"
+// @Param name query string false "标签名"
+// @Param state query int false "标签状态"
+// @Param modified_by query string true "修改人"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags/{id} [put]
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	name := c.Query("name")
@@ -113,7 +131,11 @@ func EditTag(c *gin.Context) {
 	})
 }
 
-// 删除文章标签
+// DeleteTag
+// @Summary 删除文章标签
+// @Param id path int true "文章id"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags/{id} [delete]
 func DeleteTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 

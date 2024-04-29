@@ -29,8 +29,6 @@ func init() {
 	LoadBase()
 	LoadServer()
 	LoadApp()
-	LoadLog()
-	LoadAccessLog()
 }
 
 // 获取默认分区的
